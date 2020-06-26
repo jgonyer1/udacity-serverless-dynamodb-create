@@ -1,7 +1,7 @@
 'use strict'
 
 const AWS = require('aws-sdk')
-
+const uuid = require('uuid');
 const docClient = new AWS.DynamoDB.DocumentClient()
 
 const groupsTable = process.env.GROUPS_TABLE
@@ -9,6 +9,8 @@ const groupsTable = process.env.GROUPS_TABLE
 exports.handler = async (event) => {
   console.log('Processing event: ', event)
 
+  const itemId = uuid.v4();
+  const parsedBody = JSON.parse(event.body);
   // TODO: Read and parse "limit" and "nextKey" parameters from query parameters
   // let nextKey // Next key to continue scan operation if necessary
   // let limit // Maximum number of elements to return
@@ -40,9 +42,9 @@ exports.handler = async (event) => {
       'Access-Control-Allow-Origin': '*'
     },
     body: JSON.stringify({
-      items,
+      items
       // Encode the JSON object so a client can return it in a URL as is
-      nextKey: encodeNextKey(result.LastEvaluatedKey)
+      //nextKey: encodeNextKey(result.LastEvaluatedKey)
     })
   }
 }
